@@ -4,7 +4,15 @@
 
 char *strcpy(char *destination, const char *source)
 {
-	/* TODO: Implement strcpy(). */
+	size_t dest_size = strlen(destination);
+	char *p = destination + dest_size;
+
+	size_t src_size = strlen(source);
+	for (int i = 0; i < src_size; i++)
+		*(p + i) = *(source + i);
+
+	*(p + src_size) = '\0';
+
 	return destination;
 }
 
