@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
 #include <string.h>
+#define BUFF_SIZE 128
 
 char *strcpy(char *destination, const char *source)
 {
@@ -236,27 +237,69 @@ void *memcpy(void *destination, const void *source, size_t num)
 	char *dest_ptr = (char *)destination;
 	char *src_ptr = (char *)source;
 
-	for (size_t i = 0; i < num; i++) {
+	for (size_t i = 0; i < num; i++)
 		*(dest_ptr + i) = *(src_ptr + i);
-	}
 
 	return destination;
 }
 
 void *memmove(void *destination, const void *source, size_t num)
 {
-	/* TODO: Implement memmove(). */
+	// Because it isn't allowed to use a function for memory allocation
+	// I will use a static buffer multiple times, if necessary
+	char buffer[BUFF_SIZE];
+
+	char *dest_ptr = (char *)destination;
+	char *src_ptr = (char *)source;
+
+	while (num > 0) {
+		
+		// Select how many bytes to move at this particular step
+		size_t bytes;
+		if (num < BUFF_SIZE) 
+			bytes = num;
+		else
+			num = BUFF_SIZE;
+
+		// Move the bytes in the buffer
+		for (size_t i = 0; i < bytes; i++)
+			buffer[i] = *(src_ptr + i);
+
+		// Move the bytes from the buffer to the destination
+		for (size_t i = 0; i < bytes; i++)
+			*(dest_ptr + i) = buffer[i];
+
+		num = num - bytes;
+	}
+
 	return destination;
 }
 
 int memcmp(const void *ptr1, const void *ptr2, size_t num)
 {
-	/* TODO: Implement memcmp(). */
-	return -1;
+	// As it says in the manual, the bytes should be interpreted as
+	// unsigned char
+	unsigned char *area1 = (unsigned char *)ptr1;
+	unsigned char *area2 = (unsigned char *)ptr2;
+
+	for (size_t i = 0; i < num; i++) {
+		if (*(area1 + i) > *(area2 + i))
+			return 1;
+
+		if (*(area1 + i) < *(area2 + i))
+			return -1;
+	}
+
+	return 0;
 }
 
 void *memset(void *source, int value, size_t num)
 {
-	/* TODO: Implement memset(). */
+	char *src = (char *)source;
+	char byte = value;
+
+	for (size_t i = 0; i < num; i++)
+		*(src + i) = byte;
+	
 	return source;
 }
