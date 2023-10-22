@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "string.h": "c",
+        "graded_test.h": "c"
+    }
+}
