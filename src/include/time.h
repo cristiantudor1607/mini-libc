@@ -8,9 +8,8 @@ extern "C" {
 typedef int time_t;
 struct timespec {
     time_t tv_sec;
-    time_t tv_nsec;
+    long tv_nsec;
 };
-
 
 // The declaration of nanosleep at it is in the linux man page
 int nanosleep(const struct timespec *req, struct timespec *rem);

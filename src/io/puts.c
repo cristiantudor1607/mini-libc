@@ -7,6 +7,7 @@ int puts(const char *s)
 {
     size_t num = strlen(s);
 
+    // TODO : use a || instead 2 if s
     int ret = write(1, s , num);
     if (ret < 0) {
         errno = -ret;
