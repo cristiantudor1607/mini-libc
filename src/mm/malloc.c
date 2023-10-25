@@ -9,8 +9,9 @@
 
 void *malloc(size_t size)
 {
-	/* TODO: Implement malloc(). */
-	return NULL;
+	if  (size == 0)
+		return NULL;
+
 }
 
 void *calloc(size_t nmemb, size_t size)
