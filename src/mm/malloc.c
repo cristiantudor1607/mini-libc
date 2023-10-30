@@ -80,7 +80,7 @@ void *realloc(void *ptr, size_t size)
 	if (!chunk)
 		return NULL;
 	size_t old_size = chunk->len;
-	
+
 	// Remap the memory region
 	return mremap(ptr, old_size, size, MREMAP_MAYMOVE);
 }

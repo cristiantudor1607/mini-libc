@@ -194,7 +194,7 @@ char *strstr(const char *haystack, const char *needle)
 		else
 			return p;
 
-		i++;	
+		i++;
 	}
 
 	return NULL;
@@ -251,10 +251,9 @@ void *memmove(void *destination, const void *source, size_t num)
 	char *src_ptr = (char *)source;
 
 	while (num > 0) {
-		
 		// Select how many bytes to move at this particular step
 		size_t bytes;
-		if (num < BUFF_SIZE) 
+		if (num < BUFF_SIZE)
 			bytes = num;
 		else
 			num = BUFF_SIZE;
@@ -298,6 +297,6 @@ void *memset(void *source, int value, size_t num)
 
 	for (size_t i = 0; i < num; i++)
 		*(src + i) = byte;
-	
+
 	return source;
 }
