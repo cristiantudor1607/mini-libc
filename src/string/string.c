@@ -87,7 +87,7 @@ int strcmp(const char *str1, const char *str2)
 	if (i == str1_len && j < str2_len)
 		return -1;
 
-	if (i < str1_len && j == str2_len)	
+	if (i < str1_len && j == str2_len)
 		return 1;
 
 	return 0;
@@ -124,7 +124,7 @@ int strncmp(const char *str1, const char *str2, size_t len)
 
 	if (i < str1_len && i == str2_len)
 		return 1;
-	
+
 	return 0;
 }
 
@@ -154,7 +154,7 @@ char *strchr(const char *str, int c)
 char *strrchr(const char *str, int c)
 {
 	char *result = NULL;
-	
+
 	char *p = str;
 	while (*p != '\0') {
 		if (*p == c)
@@ -169,7 +169,7 @@ char *strrchr(const char *str, int c)
 char *strstr(const char *haystack, const char *needle)
 {
 	char *p = NULL;
-	
+
 	size_t i = 0;
 	while (*(haystack + i)) {
 		// If the character doesn't match with the first character of the
@@ -194,8 +194,7 @@ char *strstr(const char *haystack, const char *needle)
 		else
 			return p;
 
-		i++;
-			
+		i++;	
 	}
 
 	return NULL;
@@ -225,7 +224,6 @@ char *strrstr(const char *haystack, const char *needle)
 			result = p;
 
 		i++;
-			
 	}
 
 	return result;

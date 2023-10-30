@@ -12,7 +12,7 @@ unsigned int sleep(unsigned int seconds)
 
     // TODO: check if nanosleep fails
     nanosleep(&req, &rem);
-    
+
     // return the number of seconds left
     return rem.tv_sec;
 }

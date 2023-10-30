@@ -21,7 +21,7 @@ void *malloc(size_t size)
 	// Add the new chunk in the list
 	// TODO: check if fail
 	int ret = mem_list_add(chunk, size);
-	
+
 	return chunk;
 }
 
@@ -35,7 +35,7 @@ void *calloc(size_t nmemb, size_t size)
 	// Set all the bytes to 0
 	for (size_t i = 0; i < nmemb * size; i++)
 		*((char *) mem_chunk + i) = 0;
-	
+
 	return mem_chunk;
 }
 
@@ -51,20 +51,20 @@ void free(void *ptr)
 		return;
 
 	size_t size = chunk->len;
-	
+
 	// munmap shouldn't fail, because the ptr was already verified;
 	// If the chunk pointed by ptr failed mapping, or it wasn't allocated by
 	// malloc, it wouldn't have been added in the list and found by
 	// mem_list_find function
 	munmap(ptr, size);
 	mem_list_del(ptr);
-	
+
 	// Don't forget to set the ptr to NULL :)
 	ptr = NULL;
 }
 
 void *realloc(void *ptr, size_t size)
-{	
+{
 	// If ptr is NULL, then is the same as malloc(size)
 	if (!ptr)
 		return malloc(size);
@@ -79,8 +79,9 @@ void *realloc(void *ptr, size_t size)
 	struct mem_list *chunk = mem_list_find(ptr);
 	if (!chunk)
 		return NULL;
-
 	size_t old_size = chunk->len;
+	
+	// Remap the memory region
 	return mremap(ptr, old_size, size, MREMAP_MAYMOVE);
 }
 

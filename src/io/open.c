@@ -12,7 +12,7 @@ int open(const char *filename, int flags, ...)
 
 	int param = va_arg(valist, int);
 	va_end(valist);
-	
+
 	int fd = syscall(__NR_open, filename, flags, param);
 
 	if (fd < 0) {
@@ -21,4 +21,4 @@ int open(const char *filename, int flags, ...)
 	}
 
 	return fd;
-}	
+}

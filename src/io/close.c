@@ -8,7 +8,7 @@
 int close(int fd)
 {
 	int ret = syscall(__NR_close, fd);
-	
+
 	if (ret < 0) {
 		errno = -ret;
 		return -1;
