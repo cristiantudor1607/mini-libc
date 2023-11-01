@@ -4,11 +4,10 @@
 
 int nanosleep(const struct timespec *req, struct timespec *rem)
 {
-    // Call the nanosleep system call
-    int ret_val = syscall(__NR_nanosleep, req, rem);
+    int ret = syscall(__NR_nanosleep, req, rem);
 
-    if (ret_val < 0) {
-        errno = -ret_val;
+    if (ret < 0) {
+        errno = -ret;
         return -1;
     }
 

@@ -11,7 +11,6 @@ struct timespec {
     long tv_nsec;
 };
 
-// The declaration of nanosleep at it is in the linux man page
 int nanosleep(const struct timespec *req, struct timespec *rem);
 
 #ifdef __cplusplus

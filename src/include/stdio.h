@@ -7,7 +7,6 @@
 extern "C" {
 #endif
 
-// The declaration of puts as it is in the linux man page
 int puts(const char *s);
 
 #ifdef __cplusplus

@@ -6,11 +6,13 @@
 char *strcpy(char *destination, const char *source)
 {
 	size_t i = 0;
+	/* Copy byte by byte until it reaches the NULL terminator */
 	while (*(source + i) != '\0') {
 		*(destination + i) = *(source + i);
 		i++;
 	}
 
+	/* Put the NULL terminator */
 	*(destination + i) = '\0';
 
 	return destination;
@@ -19,11 +21,14 @@ char *strcpy(char *destination, const char *source)
 char *strncpy(char *destination, const char *source, size_t len)
 {
 	size_t i = 0;
+	/* Copy byte by byte, until it reaches the number of required bytes, or
+	until the string ends */
 	while (*(source + i) != '\0' && i < len) {
 		*(destination + i) = *(source + i);
 		i++;
 	}
 
+	/* Set the remaining bytes, if neccessary, to 0 */
 	while (i < len) {
 		*(destination + i) = '\0';
 		i++;
@@ -34,15 +39,18 @@ char *strncpy(char *destination, const char *source, size_t len)
 
 char *strcat(char *destination, const char *source)
 {
+	/* Set a pointer to the end of the destination */
 	size_t dest_len = strlen(destination);
 	char *p = destination + dest_len;
 
 	size_t i = 0;
+	/* Copy all the bytes from source to p, moving pointer p */
 	while (*(source + i) != '\0') {
 		*(p + i) = *(source + i);
 		i++;
 	}
 
+	/* Add the NULL terminator */
 	*(p + i) = '\0';
 
 	return destination;
@@ -54,6 +62,8 @@ char *strncat(char *destination, const char *source, size_t len)
 	char *p = destination + dest_len;
 
 	size_t i = 0;
+	/* The same as strcat, but copy the bytes until it reaches the required
+	number of bytes, or until it reaches the end of the string */
 	while (i < len && *(source + i) != '\0') {
 		*(p + i) = *(source + i);
 		i++;
@@ -69,8 +79,8 @@ int strcmp(const char *str1, const char *str2)
 	size_t str1_len = strlen(str1);
 	size_t str2_len = strlen(str2);
 
-	// Go through the characters until one interator reaches the end of it's
-	// string
+	/* Go through the characters until one interator reaches the end of it's
+	string */
 	size_t i = 0, j = 0;
 	while (i < str1_len && j < str2_len) {
 		if (*(str1 + i) > *(str2 + j))
@@ -83,7 +93,7 @@ int strcmp(const char *str1, const char *str2)
 		j++;
 	}
 
-	// Check if one string is shorter than other
+	/* Check if one string is shorter than the other */
 	if (i == str1_len && j < str2_len)
 		return -1;
 
@@ -98,8 +108,8 @@ int strncmp(const char *str1, const char *str2, size_t len)
 	size_t str1_len = strlen(str1);
 	size_t str2_len = strlen(str2);
 
-	// Go through the characters until either the iterator reaches the end of
-	// one string or the maximum number -len- of bytes is reached
+	/* Go through the characters until either the iterator reaches the end of
+	one string or the maximum number of bytes is reached */
 	size_t i = 0;
 	while (i < str1_len && i < str2_len && i < len) {
 		if (*(str1 + i) > *(str2 + i))
@@ -111,14 +121,12 @@ int strncmp(const char *str1, const char *str2, size_t len)
 		i++;
 	}
 
-	// If it reached the maximum number -len- of bytes, and it didn't return
-	// anything, then should return 0, because the -len- bytes of the strings
-	// compared are equal
+	/* If it reached the maximum number -len- of bytes, and it didn't return
+	anything, then should return 0, because the required bytes of the strings
+	compared are equal */
 	if (i == len)
 		return 0;
 
-	// If one string is shorter than the other, and is also shorter than len
-	// bytes, check which string has reached the end
 	if (i == str1_len && i < str2_len)
 		return -1;
 
@@ -140,8 +148,9 @@ size_t strlen(const char *str)
 
 char *strchr(const char *str, int c)
 {
-	char *p = str;
+	char *p = (char *)str;
 	while (*p != '\0') {
+		/* Return the first address found */
 		if (*p == c)
 			return p;
 
@@ -154,9 +163,10 @@ char *strchr(const char *str, int c)
 char *strrchr(const char *str, int c)
 {
 	char *result = NULL;
+	char *p = (char *)str;
 
-	char *p = str;
 	while (*p != '\0') {
+		/* If it finds a matching character, store the last address found */
 		if (*p == c)
 			result = p;
 
@@ -172,23 +182,23 @@ char *strstr(const char *haystack, const char *needle)
 
 	size_t i = 0;
 	while (*(haystack + i)) {
-		// If the character doesn't match with the first character of the
-		// needle, then go to the next character
+		/* If the character doesn't match with the first character of the
+		needle, then go to the next character */
 		if (*(haystack + i) != *needle) {
 			i++;
 			continue;
 		}
 
-		// If the characters match, set the pointer p, and check for the other
-		// characters
-		p = haystack + i;
+		/* If the characters match, set the pointer p, and check for the other
+		characters */
+		p = (char *)haystack + i;
 		size_t j = 1;
 		while (*(haystack + i + j) == *(needle + j) && *(needle + j))
 			j++;
 
-		// If it exists the while loop and needle[i] isn't '\0', then the
-		// sequence doesn't match, and it should reset p; otherwise, it should
-		// return p
+		/* If it exists the while loop and needle[i] isn't '\0', then the
+		sequence doesn't match, and it should reset p; otherwise, it should
+		return p */
 		if (*(needle + j))
 			p = NULL;
 		else
@@ -205,7 +215,8 @@ char *strrstr(const char *haystack, const char *needle)
 	char *result = NULL;
 	char *p = NULL;
 
-	// Similiar approach to strstr
+	/* Similar approach to strsr, but we'll store the last address found,
+	if more than one is matching */
 	size_t i = 0;
 	while (*(haystack + i)) {
 		if (*(haystack + i) != *needle) {
@@ -213,7 +224,7 @@ char *strrstr(const char *haystack, const char *needle)
 			continue;
 		}
 
-		p = haystack + i;
+		p = (char *)haystack + i;
 		size_t j = 1;
 		while (*(haystack + i + j) == *(needle + j) && *(needle + j))
 			j++;
@@ -231,7 +242,8 @@ char *strrstr(const char *haystack, const char *needle)
 
 void *memcpy(void *destination, const void *source, size_t num)
 {
-	// Make some pointers using the fact that a char has 1 byte
+	/* Because a char is stored on one byte, cast the pointers to char
+	to go through byte by byte */
 	char *dest_ptr = (char *)destination;
 	char *src_ptr = (char *)source;
 
@@ -243,26 +255,26 @@ void *memcpy(void *destination, const void *source, size_t num)
 
 void *memmove(void *destination, const void *source, size_t num)
 {
-	// Because it isn't allowed to use a function for memory allocation
-	// I will use a static buffer multiple times, if necessary
+	/* Because I don't have acces to malloc function to make a variable 
+	size buffer, I will use a static buffer multiple times, if necessary */
 	char buffer[BUFF_SIZE];
 
 	char *dest_ptr = (char *)destination;
 	char *src_ptr = (char *)source;
 
 	while (num > 0) {
-		// Select how many bytes to move at this particular step
+		/* Select how many bytes to move at current iteration */
 		size_t bytes;
 		if (num < BUFF_SIZE)
 			bytes = num;
 		else
 			num = BUFF_SIZE;
 
-		// Move the bytes in the buffer
+		/* Move the bytes in the buffer */
 		for (size_t i = 0; i < bytes; i++)
 			buffer[i] = *(src_ptr + i);
 
-		// Move the bytes from the buffer to the destination
+		/* Move the bytes from the buffer to the destination */
 		for (size_t i = 0; i < bytes; i++)
 			*(dest_ptr + i) = buffer[i];
 
@@ -274,8 +286,8 @@ void *memmove(void *destination, const void *source, size_t num)
 
 int memcmp(const void *ptr1, const void *ptr2, size_t num)
 {
-	// As it says in the manual, the bytes should be interpreted as
-	// unsigned char
+	/* As it says in the manual, the bytes should be interpreted as
+	unsigned char */
 	unsigned char *area1 = (unsigned char *)ptr1;
 	unsigned char *area2 = (unsigned char *)ptr2;
 

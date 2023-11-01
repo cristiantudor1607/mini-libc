@@ -13,26 +13,29 @@ void *malloc(size_t size)
 	if  (size == 0)
 		return NULL;
 
-	// Map the required chunk of memory using mmap
+	/* Map the required chunk of memory using mmap */
 	void *chunk = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	if (chunk == MAP_FAILED)
 		return NULL;
 
-	// Add the new chunk in the list
-	// TODO: check if fail
+	/* Add the new chunk in the list*/
 	int ret = mem_list_add(chunk, size);
+	
+	/* Check if the add operation failed */
+	if (ret == -1)
+		munmap(chunk, size);
 
 	return chunk;
 }
 
 void *calloc(size_t nmemb, size_t size)
 {
-	// Get a new chunk of memory
+	/* Get a new chunk of memory */
 	void *mem_chunk = malloc(nmemb * size);
 	if (mem_chunk == NULL)
 		return NULL;
 
-	// Set all the bytes to 0
+	/* Set all the bytes to 0 */
 	for (size_t i = 0; i < nmemb * size; i++)
 		*((char *) mem_chunk + i) = 0;
 
@@ -41,53 +44,54 @@ void *calloc(size_t nmemb, size_t size)
 
 void free(void *ptr)
 {
-	// If ptr is NULL, do nothing
+	/* If ptr is NULL, do nothing */
 	if (!ptr)
 		return;
 
-	// Find the chunk of memory that is about to be deleted
+	/* Find the chunk of memory that is about to be deleted */
 	struct mem_list *chunk = mem_list_find(ptr);
 	if (!chunk)
 		return;
 
 	size_t size = chunk->len;
 
-	// munmap shouldn't fail, because the ptr was already verified;
-	// If the chunk pointed by ptr failed mapping, or it wasn't allocated by
-	// malloc, it wouldn't have been added in the list and found by
-	// mem_list_find function
+	/* munmap shouldn't fail, because the ptr was already verified.
+	If the chunk pointed by ptr failed mapping, or it wasn't allocated by
+	malloc, it wouldn't have been added in the list and found by
+	mem_list_find function
+	*/
 	munmap(ptr, size);
 	mem_list_del(ptr);
 
-	// Don't forget to set the ptr to NULL :)
+	/* Set ptr to NULL */
 	ptr = NULL;
 }
 
 void *realloc(void *ptr, size_t size)
 {
-	// If ptr is NULL, then is the same as malloc(size)
+	/* If ptr is NULL, then is the same as malloc(size) */
 	if (!ptr)
 		return malloc(size);
 
-	// If the size is 0, then is the same as free(ptr)
+	/* If the size is 0, then is the same as free(ptr) */
 	if (!size) {
 		free(ptr);
 		return NULL;
 	}
 
-	// Get the old size of the chunk
+	/* Get the old size of the chunk from the list */
 	struct mem_list *chunk = mem_list_find(ptr);
 	if (!chunk)
 		return NULL;
 	size_t old_size = chunk->len;
 
-	// Remap the memory region
+	/* Remap the memory region */
 	return mremap(ptr, old_size, size, MREMAP_MAYMOVE);
 }
 
 void *reallocarray(void *ptr, size_t nmemb, size_t size)
 {
-	// As the manual page says, the reallocarray call is equivalent to
-	// realloc(ptr, nmemb * size)
+	/* reallocarray is basically the same as realloc(ptr, nmemb * size), as
+	the manula says */
 	return realloc(ptr, nmemb * size);
 }
