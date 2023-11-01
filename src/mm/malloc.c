@@ -20,7 +20,7 @@ void *malloc(size_t size)
 
 	/* Add the new chunk in the list*/
 	int ret = mem_list_add(chunk, size);
-	
+
 	/* Check if the add operation failed */
 	if (ret == -1)
 		munmap(chunk, size);

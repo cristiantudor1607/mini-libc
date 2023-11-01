@@ -12,7 +12,7 @@ unsigned int sleep(unsigned int seconds)
     rem.tv_nsec = 0;
     rem.tv_sec = 0;
     nanosleep(&req, &rem);
-    
+
     /* Return the number of seconds left */
     return rem.tv_sec;
 }
